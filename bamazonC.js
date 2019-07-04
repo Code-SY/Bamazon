@@ -32,13 +32,12 @@ var resetCart = function() {
 var displayItems = function() {
     connection.query(`SELECT * FROM products`, function(err, result) {
         var listTable = new Table({
-            head: ["Item ID", "Product Name", "Price"],
-            colWidths: [10, 52, 12],
-            
+            head: ["Item Id", "Product Name", "Price", "Quantity"],
+            colWidths: [10, 52, 10, 10]
         });
 
         for (var i = 0; i < result.length; i++) {
-            listTable.push([result[i].item_id, result[i].product_name, "$" + result[i].price]);
+            listTable.push([result[i].item_id, result[i].product_name, "$" + result[i].price, result[i].stock_quantity]);
         }
         
         console.log(chalk.green("Available products:"));
