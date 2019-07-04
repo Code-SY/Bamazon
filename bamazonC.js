@@ -78,7 +78,7 @@ var confirmItem = function(product, record) {
     inquirer.prompt({
         name: "confirmItem",
         type: "confirm",
-        message: "You chose" + chalk.blue.bold("'" + product + "'. ") + "Is this correct?"
+        message: "You chose " + chalk.blue.bold("'" + product + "'. ") + "Is this correct?"
     }).then(function(answer) {
         if (answer.confirmItem) {
             chosenItem = {
