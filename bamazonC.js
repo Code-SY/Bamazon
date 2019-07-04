@@ -16,7 +16,9 @@ connection.connect(function(err) {
     if (err) {
         throw err;
     }
-    console.log("Connection successful");
+    console.log("Connection successful!");
+    console.log(chalk.green("\nWelcome to BAMAZON!\n"));
+
     
     displayItems();
 });
@@ -39,7 +41,8 @@ var displayItems = function() {
             listTable.push([result[i].item_id, result[i].product_name, "$" + result[i].price]);
         }
         
-        console.log("\n" + listTable.toString() + "\n");
+        console.log(chalk.green("Available products:"));
+        console.log(listTable.toString() + "\n");
         
         askForProductId();
     });
