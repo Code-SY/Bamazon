@@ -19,7 +19,6 @@ connection.connect(function(err) {
     console.log("Connection successful!");
     console.log(chalk.green("\nWelcome to BAMAZON!\n"));
 
-    
     displayItems();
 });
 
@@ -32,12 +31,15 @@ var resetCart = function() {
 var displayItems = function() {
     connection.query(`SELECT * FROM products`, function(err, result) {
         var listTable = new Table({
-            head: ["Item Id", "Product Name", "Price", "Quantity"],
-            colWidths: [10, 52, 10, 10]
+            head: ["Item Id", "Product Name", "Department", "Price", "Quantity"],
+            colWidths: [9, 52, 13, 12, 12]
         });
 
         for (var i = 0; i < result.length; i++) {
-            listTable.push([result[i].item_id, result[i].product_name, "$" + result[i].price, result[i].stock_quantity]);
+            listTable.push([result[i].item_id, result[i].product_name, 
+            result[i].department_name,
+            "$ " + result[i].price, 
+            result[i].stock_quantity]);
         }
         
         console.log(chalk.green("Available products:"));
@@ -51,7 +53,7 @@ var askForProductId = function() {
     inquirer.prompt({
         name: "itemId",
         type: "input",
-        message: "Enter the ID of the product you would like to purchase:",
+        message: "Enter the Id of the product you would like to purchase:",
         
         validate: function(value) {
             if (!isNaN(value) && (value > 0 && value <= 10)) {
@@ -65,7 +67,7 @@ var askForProductId = function() {
     
     }).then(function(answer) {
         connection.query(
-            "SELECT item_id, product_name, price, stock_quantity, product_sales FROM products WHERE ?",
+            "SELECT item_id, product_name, department_name, price, stock_quantity, product_sales FROM products WHERE ?",
             { item_id: answer.itemId },
             function(err, result) {
                 confirmItem(result[0].product_name, result);
@@ -83,6 +85,7 @@ var confirmItem = function(product, record) {
             chosenItem = {
                 item_id: record[0].item_id,
                 product_name: record[0].product_name,
+                department_name: record[0].department_name,
                 price: record[0].price,
                 stock_quantity: record[0].stock_quantity,
                 product_sales: record[0].product_sales
@@ -95,7 +98,7 @@ var confirmItem = function(product, record) {
     });
 };
 
-var askHowMany = function(chosenID) {
+var askHowMany = function(chosenId) {
     inquirer.prompt({
         name: "howMany",
         type: "input",
